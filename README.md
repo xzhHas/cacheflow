@@ -2,6 +2,8 @@
 
 MySQL→Redis 缓存一致性库。在你的服务进程中启动后，监听 binlog 并自动维护缓存（默认删除）。
 
+项目简洁文档：https://blog.csdn.net/m0_73337964/article/details/154839238?spm=1001.2014.3001.5501
+
 ## 安装
 
 ```
