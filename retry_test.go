@@ -16,15 +16,7 @@ func TestEnqueueOnRedisError(t *testing.T) {
     c, mock := redismock.NewClientMock()
     s := New()
     s.SetConfig(Config{
-        Redis: struct {
-            Addr     string
-            Password string
-            DB       int
-        }{
-            Addr:     "127.0.0.1:6379",
-            Password: "",
-            DB:       0,
-        },
+        Redis: RedisConfig{Addr: "127.0.0.1:6379", DB: 0},
         Tables: []TableConfig{
             {
                 DB:    "user",
@@ -35,19 +27,7 @@ func TestEnqueueOnRedisError(t *testing.T) {
                 Strategy: CacheAside,
             },
         },
-        Retry: struct {
-            Enable        bool
-            MaxAttempts   int
-            BackoffMillis int
-            MQ            struct {
-                URL        string
-                Exchange   string
-                Queue      string
-                RoutingKey string
-                DLX        string
-                DLQ        string
-            }
-        }{Enable: true, MaxAttempts: 1, BackoffMillis: 1},
+        Retry: RetryConfig{Enable: true, MaxAttempts: 1, BackoffMillis: 1},
     })
     s.rc = c
     rp := &recProd{}

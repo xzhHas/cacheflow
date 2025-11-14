@@ -10,11 +10,7 @@ func TestDispatchDelete(t *testing.T) {
     c, mock := redismock.NewClientMock()
     s := New()
     s.SetConfig(Config{
-        Redis: struct {
-            Addr     string
-            Password string
-            DB       int
-        }{
+        Redis: RedisConfig{
             Addr:     "127.0.0.1:6379",
             Password: "",
             DB:       0,

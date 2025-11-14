@@ -22,6 +22,10 @@ type CacheStrategy = types.CacheStrategy
 type Handler = types.Handler
 type KeyFunc = types.KeyFunc
 type Event = types.Event
+type MySQLConfig = types.MySQLConfig
+type RedisConfig = types.RedisConfig
+type MQConfig = types.MQConfig
+type RetryConfig = types.RetryConfig
 
 // CacheAside：删除缓存；业务读取时重建（推荐，强最终一致性）
 const CacheAside CacheStrategy = types.CacheAside

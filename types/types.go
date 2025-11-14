@@ -36,23 +36,36 @@ type TableConfig struct {
 // - Retry：失败重试队列（可选）
 // - PositionPath：位点持久化文件路径
 // - Tables：需要维护一致性的表清单
+type MySQLConfig struct {
+    Addr     string
+    User     string
+    Password string
+    Flavor   string
+    GTID     bool
+    ServerID uint32
+}
+
+type RedisConfig struct {
+    Addr     string
+    Password string
+    DB       int
+}
+
+type MQConfig struct {
+    URL        string
+    Exchange   string
+    Queue      string
+    RoutingKey string
+    DLX        string
+    DLQ        string
+}
+
 type Config struct {
-    MySQL struct {
-        Addr     string
-        User     string
-        Password string
-        Flavor   string
-        GTID     bool
-        ServerID uint32
-    }
-    Redis struct {
-        Addr     string
-        Password string
-        DB       int
-    }
-    Retry        RetryConfig
+    MySQL       MySQLConfig
+    Redis       RedisConfig
+    Retry       RetryConfig
     PositionPath string
-    Tables       []TableConfig
+    Tables      []TableConfig
 }
 
 // Handler 为用户自定义处理器，可覆盖默认策略
@@ -72,14 +85,7 @@ type RetryConfig struct {
     Enable        bool
     MaxAttempts   int
     BackoffMillis int
-    MQ            struct {
-        URL        string
-        Exchange   string
-        Queue      string
-        RoutingKey string
-        DLX        string
-        DLQ        string
-    }
+    MQ            MQConfig
 }
 
 type Event struct {

@@ -22,10 +22,8 @@ import "github.com/xzhHas/cacheflow"
 
 func main() {
     s, _ := cacheflow.StartSyncer(cacheflow.Config{
-        MySQL: struct{ Addr, User, Password, Flavor string; GTID bool; ServerID uint32 }{
-            Addr: "127.0.0.1:3306", User: "root", Password: "", Flavor: "mysql", ServerID: 1001,
-        },
-        Redis: struct{ Addr, Password string; DB int }{Addr: "127.0.0.1:6379", DB: 0},
+        MySQL: cacheflow.MySQLConfig{Addr: "127.0.0.1:3306", User: "root", Password: "", Flavor: "mysql", ServerID: 1001},
+        Redis: cacheflow.RedisConfig{Addr: "127.0.0.1:6379", DB: 0},
         Tables: []cacheflow.TableConfig{{DB: "user", Table: "users", Strategy: cacheflow.CacheAside}},
     })
     defer s.Stop()
@@ -39,10 +37,8 @@ func main() {
 
 ```go
 s, _ := cacheflow.StartSyncer(cacheflow.Config{
-  MySQL: struct{ Addr, User, Password, Flavor string; GTID bool; ServerID uint32 }{
-    Addr: "127.0.0.1:3306", User: "root", Password: "", Flavor: "mysql", ServerID: 1001,
-  },
-  Redis: struct{ Addr, Password string; DB int }{Addr: "127.0.0.1:6379", DB: 0},
+  MySQL: cacheflow.MySQLConfig{Addr: "127.0.0.1:3306", User: "root", Password: "", Flavor: "mysql", ServerID: 1001},
+  Redis: cacheflow.RedisConfig{Addr: "127.0.0.1:6379", DB: 0},
   Tables: []cacheflow.TableConfig{{DB: "user", Table: "users", Strategy: cacheflow.WriteThrough, TTLSeconds: 300}},
 })
 defer s.Stop()
@@ -60,21 +56,17 @@ for e := range s.Events() { /* ... */ }
 
 ```go
 s, _ := cacheflow.StartSyncer(cacheflow.Config{
-  MySQL: struct{ Addr, User, Password, Flavor string; GTID bool; ServerID uint32 }{
-    Addr: "127.0.0.1:3306", User: "root", Password: "", Flavor: "mysql", ServerID: 1001,
-  },
-  Redis: struct{ Addr, Password string; DB int }{Addr: "127.0.0.1:6379", DB: 0},
+  MySQL: cacheflow.MySQLConfig{Addr: "127.0.0.1:3306", User: "root", Password: "", Flavor: "mysql", ServerID: 1001},
+  Redis: cacheflow.RedisConfig{Addr: "127.0.0.1:6379", DB: 0},
   Tables: []cacheflow.TableConfig{{DB: "user", Table: "users", Strategy: cacheflow.CacheAside}},
-  Retry: struct {
-    Enable        bool
-    MaxAttempts   int
-    BackoffMillis int
-    MQ            struct {
-      URL, Exchange, Queue, RoutingKey, DLX, DLQ string
-    }
-  }{Enable: true, MaxAttempts: 3, BackoffMillis: 500, MQ: struct{ URL, Exchange, Queue, RoutingKey, DLX, DLQ string }{
-    URL: "amqp://guest:guest@127.0.0.1:5672/", Exchange: "cacheflow", Queue: "cacheflow.retry", RoutingKey: "retry",
-  }},
+  Retry: cacheflow.RetryConfig{
+    Enable: true,
+    MaxAttempts: 3,
+    BackoffMillis: 500,
+    MQ: cacheflow.MQConfig{
+      URL: "amqp://guest:guest@127.0.0.1:5672/", Exchange: "cacheflow", Queue: "cacheflow.retry", RoutingKey: "retry",
+    },
+  },
 })
 defer s.Stop()
 ```
